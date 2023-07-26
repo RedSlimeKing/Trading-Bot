@@ -1,0 +1,11 @@
+2023-07-07 20:39:41,763 - 
+1 Failed download:
+2023-07-07 20:39:41,764 - ['GOOG.TO']: Exception('%ticker%: No timezone found, symbol may be delisted')
+2023-07-07 20:41:13,498 - 
+1 Failed download:
+2023-07-07 20:41:13,500 - ['GOOG.TO']: Exception('%ticker%: No timezone found, symbol may be delisted')
+2023-07-10 02:38:49,786 - price-repair-missing: No price=0 errors to repair
+2023-07-10 02:38:49,793 - price-repair-split: No bad splits detected
+2023-07-10 02:38:49,808 - 
+1 Failed download:
+2023-07-10 02:38:49,809 - ['GOOG']: ModuleNotFoundError("No module named 'scipy'")
