@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="StockTransactionRecord.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Strategies.py">
       <SubType>Code</SubType>
     </Compile>
