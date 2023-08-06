@@ -31,9 +31,6 @@
     <Compile Include="Portfolio.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StockGraph.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Stock.py" />
     <Compile Include="TradingBOT.py" />
   </ItemGroup>

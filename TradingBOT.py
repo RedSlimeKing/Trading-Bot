@@ -1,28 +1,8 @@
 import logging
-import Stock as sk
-import StockGraph as stock_graph
 import time as wait_time
 from datetime import datetime, time
-
-
-"""                 Plan
-    loop {
-        Resolve commands from dashboard
-        Data Acquisition
-        Data Processing
-        Analysis and Signal Generation
-        Risk Management
-        Order Placement
-        Trade Excution and Monintoring
-        Portfolio Management
-    }
-
-    Asynchronously Recieve command from Desktop Dashboard
-    Excute commands
-
-                    TO DO
-     - Figure out how using fake money to test strategies will work into this
- """
+from threading import Thread
+import Portfolio as pf
 
 def is_stock_market_open():
     now = datetime.now().time()
@@ -35,16 +15,16 @@ def is_stock_market_open():
         return False
 
 def LogActivity():
-    current_time = datetime.datetime.now().strftime('%H:%M:%S')
+    current_time = datetime.now().strftime('%H:%M:%S')
     logging.info(f'Bot is performing an action. Current time: {current_time}')
 
 """         Flow
     {
         Recieve string from console command on computer
         Add command to queue in bots main loop
-        Sends error message to bot
+        Sends error message from bot
         If requesting data, send package Example:
-                            { Cash_balance, Portfolio Performance, watchlist, owned_stocks, transaction_history, Activity_Logs }            
+                            { Cash_balance, Portfolio, Activity_Logs }            
     }
     {
         Resolve commands from dashboard (Function)
@@ -83,34 +63,135 @@ def LogActivity():
     }
 """
 
+def message_handler(commands):
+    message = 'Buy'
+    commands.append(message)
+    return commands
+
+def handle_commands(_commands):
+    for command in _commands:
+        if command == 'Buy':
+            print('buy[]')
+            """                                 Should pass 
+                Symbol
+                Quanitiy
+                Order type { Market Orders, Limit Orders }
+                    IF Limit Order = Limit_price
+
+            """
+        elif command == 'Sell':
+            print('Sell[]')
+            """                                 Should pass 
+                Symbol
+                Quanitiy
+                Order type { Stop Orders, Trailling Stop Orders }
+                Stop Price  
+                    IF Trailling Stop Orders = trailing_percent
+
+            """
+        elif command == 'Add stock to watchlist':
+            print('Add stock to watchlist[]')
+            """                                 Should pass 
+                Symbol
+                
+                - add to watchlist
+                - analysis 
+                - store prediction
+                - queue to wait for right time to buy
+            """
+        elif command == 'Remove stock from watchlist':
+            print('Remove stock from watchlist[]')
+            """                                 Should pass 
+                Symbol
+                
+                - Remove to watchlist
+            """
+        elif command == 'Start':
+            print('Start[]')
+            """                                
+                Set inner status_value to true, will run between Data acqusition to Excution Monintoring
+            """
+
+        elif command == 'Stop':
+            print('Stop[]')
+            """                                
+                Set inner status_value to false, will not run code from Data acqusition to Excution Monintoring but will still run handle_commands and portfolio management
+            """
+        elif command == 'Commands':
+            print('Commands[]')
+            """                                
+                Send list of commands to dashboard
+            """
+        elif command == 'Update':
+            print('Sending package')
+            """                                
+                Send a package of data to update dashboard UI, mainly send by program and not user
+            """
+        else:
+            print('Not a recogniced command')
+            """                                
+                Sends message back to user on failure to understand command with what user sent
+            """
+
+def update_stock_data():
+    print('update stocks data: Data Acquisition')
+    # update stocks that are currently owned
+    # update watched stocks
+    # update stock that are waiting for time to purchase
+
+def prep_data():
+    print('prossess data: Data Processing')
+
+def analysis():
+    print('analysis')
+
 # Start of Program
-current_time = datetime.datetime.now().strftime('%H:%M:%S')
-logging.basicConfig(filename=f'Activity{current_time}.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+current_date = datetime.today().strftime("%d-%m-%Y")
+logging.basicConfig(filename=f'Activity/Activity{current_date}.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
+# Queue for commands by thread
+commands = []
 
-newStock = sk.Stock('ABVC')
-newStock.fetch_data()
+# Bot's Portfolio
+portfolio = pf()
+
+# Runs message_handler to recieve commands from console
+thread = Thread(target=message_handler, args=(commands,))
+thread.start()
 
 is_running = True         
 while is_running:
+    #Resolve commands from dashboard
+    handle_commands(commands)
+    
+    
+    if is_stock_market_open() is True:  
+        print('a')
+    
+        # Data Acquisition
+        update_stock_data()
+        # Data Processing
+        prep_data()
+        # Analysis and Signal Generation
+        analysis()
+        # Risk Management
 
-    current_time = datetime.now().strftime("%I:%M %p")
-    # Print the current time
-    print("Current time:", current_time)
+        # Order Placement
+        # Trade Excution
+        # Excution Monintoring
+        
+    # Portfolio Management
+    """
 
-    if is_stock_market_open() is False:  # Change to False
-        is_running = False
-        print('Stock market is Closed')
-
-
+    """
     wait_time.sleep(3) # do 300 for 5 min wait
-
-# Create an instance of the StockGraph class with the stock data
-stock_graph = stock_graph.StockGraph(newStock)  
-# Display the stock data in a graph
-stock_graph.display_graph() 
-
-
 
 # Program has ended
 print("END")
+
+
+"""
+    # Print the current time
+    current_time = datetime.now().strftime("%I:%M %p")
+    print("Current time:", current_time)
+"""
